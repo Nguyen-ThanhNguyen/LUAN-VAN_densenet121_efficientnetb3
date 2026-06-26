@@ -1,7 +1,7 @@
 ---
 title: DenseNet121 EfficientNetB3 DR Diagnosis
 emoji: 🩺
-colorFrom: teal
+colorFrom: green
 colorTo: blue
 sdk: docker
 pinned: false
