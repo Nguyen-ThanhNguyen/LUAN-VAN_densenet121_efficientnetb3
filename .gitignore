@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+.env
+
+backend/static/uploads/*
+backend/static/processed/*
+backend/static/heatmaps/*
+backend/static/reports/*
+!backend/static/uploads/.gitkeep
+!backend/static/processed/.gitkeep
+!backend/static/heatmaps/.gitkeep
+!backend/static/reports/.gitkeep
+
+backend/models/*.pth
+backend/models/*.npy

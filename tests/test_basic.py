@@ -1,0 +1,7 @@
+from pathlib import Path
+
+def test_project_structure():
+    root = Path(__file__).resolve().parents[1]
+    assert (root / "backend" / "app" / "main.py").exists()
+    assert (root / "frontend" / "index.html").exists()
+    assert (root / "backend" / "models" / "inference_config.json").exists()

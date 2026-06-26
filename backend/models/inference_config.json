@@ -1,0 +1,30 @@
+{
+  "version": "v3",
+  "task": "diabetic_retinopathy_5_class_classification",
+  "prediction_rule": "ensemble_argmax",
+  "image_size": 320,
+  "preprocessing": [
+    "crop_black_border",
+    "CLAHE_LAB",
+    "resize_320",
+    "backbone_preprocess_input"
+  ],
+  "models": {
+    "efficientnetb3": {
+      "filename": "efficientnetb3_best.h5",
+      "weight": 0.55
+    },
+    "densenet121": {
+      "filename": "densenet121_best.h5",
+      "weight": 0.45
+    }
+  },
+  "class_names": {
+    "0": "No DR",
+    "1": "Mild DR",
+    "2": "Moderate DR",
+    "3": "Severe DR",
+    "4": "Proliferative DR"
+  },
+  "medical_notice": "Research and screening support only. Not a replacement for ophthalmologist diagnosis."
+}

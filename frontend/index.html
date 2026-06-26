@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DR Diagnosis System v3</title>
+  <link rel="stylesheet" href="/frontend/css/style.css"/>
+</head>
+<body>
+  <header class="app-header">
+    <nav class="topbar" aria-label="Thanh điều hướng">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img">
+            <path d="M12 3.5c4.8 0 8.9 3.4 10 8.1-1.1 4.7-5.2 8.1-10 8.1S3.1 16.3 2 11.6c1.1-4.7 5.2-8.1 10-8.1Zm0 3.2a4.9 4.9 0 1 0 0 9.8 4.9 4.9 0 0 0 0-9.8Zm0 2.2a2.7 2.7 0 1 1 0 5.4 2.7 2.7 0 0 1 0-5.4Z"/>
+          </svg>
+        </span>
+        <span>
+          <strong>DR Diagnosis</strong>
+          <small>Medical AI v3</small>
+        </span>
+      </a>
+
+      <div class="status-card" id="healthCard">
+        <span class="status-dot" aria-hidden="true"></span>
+        <div>
+          <p>Trạng thái hệ thống</p>
+          <strong id="healthText">Đang kiểm tra...</strong>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">AI hỗ trợ sàng lọc võng mạc</p>
+        <h1>Phân tích ảnh đáy mắt cho bệnh võng mạc đái tháo đường</h1>
+        <p class="subtitle">
+          Giao diện lâm sàng cho mô hình ensemble 5 mức độ DR, tập trung vào độ tin cậy,
+          cảnh báo bất định và khả năng xem lại ảnh xử lý cùng heatmap.
+        </p>
+        <div class="pill-row" aria-label="Thông tin mô hình">
+          <span class="pill">EfficientNetB3 55%</span>
+          <span class="pill">DenseNet121 45%</span>
+          <span class="pill">CLAHE + Resize 320</span>
+          <span class="pill">Không dùng ESRGAN</span>
+        </div>
+      </div>
+
+      <div class="retina-visual" aria-label="Mô phỏng phân tích ảnh võng mạc">
+        <div class="scan-frame">
+          <span class="scan-line" aria-hidden="true"></span>
+          <div class="retina-core">
+            <span class="vessel vessel-one"></span>
+            <span class="vessel vessel-two"></span>
+            <span class="vessel vessel-three"></span>
+            <span class="lesion lesion-one"></span>
+            <span class="lesion lesion-two"></span>
+            <span class="optic-disc"></span>
+          </div>
+        </div>
+        <div class="signal-card signal-left">
+          <span>Input quality</span>
+          <strong>Fundus ROI</strong>
+        </div>
+        <div class="signal-card signal-right">
+          <span>Output</span>
+          <strong>5-class DR</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="workspace">
+      <section class="panel upload-panel" aria-labelledby="uploadTitle">
+        <div class="section-title">
+          <span class="step-badge">01</span>
+          <div>
+            <h2 id="uploadTitle">Tải ảnh đáy mắt</h2>
+            <p>Chọn ảnh fundus rõ nét, định dạng PNG/JPG/JPEG, tối đa 10MB.</p>
+          </div>
+        </div>
+
+        <label class="dropzone" for="fileInput" id="dropzone">
+          <input id="fileInput" type="file" accept="image/png,image/jpeg,image/jpg"/>
+          <div class="dropzone-content">
+            <div class="upload-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <path d="M12 3.5 6.7 8.8l1.4 1.4 2.9-2.9V16h2V7.3l2.9 2.9 1.4-1.4L12 3.5ZM5 18v2h14v-2H5Z"/>
+              </svg>
+            </div>
+            <h3>Chọn hoặc kéo thả ảnh vào đây</h3>
+            <p>Ảnh đầu vào cần là ảnh đáy mắt đúng vùng võng mạc.</p>
+          </div>
+        </label>
+
+        <div id="previewBox" class="preview-box hidden">
+          <img id="previewImg" alt="Ảnh xem trước"/>
+          <div>
+            <span class="preview-label">Tệp đã chọn</span>
+            <h3 id="fileName">-</h3>
+            <p id="fileMeta">-</p>
+          </div>
+        </div>
+
+        <button id="predictBtn" class="primary-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M11 2h2v5h-2V2Zm0 15h2v5h-2v-5ZM2 11h5v2H2v-2Zm15 0h5v2h-5v-2ZM4.9 3.5l3.6 3.6-1.4 1.4-3.6-3.6 1.4-1.4Zm12 12 3.6 3.6-1.4 1.4-3.6-3.6 1.4-1.4Zm2.2-12 1.4 1.4-3.6 3.6-1.4-1.4 3.6-3.6ZM7.1 15.5l1.4 1.4-3.6 3.6-1.4-1.4 3.6-3.6Z"/>
+          </svg>
+          Phân tích ảnh
+        </button>
+        <p class="hint">
+          Kết quả chỉ hỗ trợ tham khảo. Trường hợp cảnh báo bất định cao hoặc nghi ngờ giữa class 2/class 3 cần được bác sĩ chuyên khoa kiểm tra lại.
+        </p>
+      </section>
+
+      <aside class="clinical-note" aria-labelledby="clinicalTitle">
+        <div class="note-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img">
+            <path d="M11 3h2v6h6v2h-6v6h-2v-6H5V9h6V3Zm-6 16h14v2H5v-2Z"/>
+          </svg>
+        </div>
+        <h2 id="clinicalTitle">Lưu ý y tế</h2>
+        <p>Hệ thống AI y tế cần trình bày rõ giới hạn sử dụng.</p>
+        <ul>
+          <li>Không thay thế bác sĩ chuyên khoa mắt.</li>
+          <li>Chỉ dùng với ảnh đáy mắt rõ nét, đúng vùng võng mạc.</li>
+          <li>Class 3 - Severe DR còn là hạn chế trong thực nghiệm.</li>
+          <li>Khi class 2 và class 3 gần nhau, hệ thống sẽ cảnh báo để tránh đánh giá thấp mức độ bệnh.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section id="loadingPanel" class="panel loading-panel hidden" aria-live="polite">
+      <div class="loader"></div>
+      <div>
+        <h2>Đang phân tích ảnh...</h2>
+        <p>Mô hình đang tiền xử lý ảnh, chạy DenseNet121, EfficientNetB3 và ensemble.</p>
+      </div>
+    </section>
+
+    <section id="resultPanel" class="panel result-panel hidden" aria-labelledby="resultTitle">
+      <div class="section-title result-heading">
+        <span class="step-badge">02</span>
+        <div>
+          <h2 id="resultTitle">Kết quả dự đoán</h2>
+          <p>Phiên bản v3 ensemble argmax.</p>
+        </div>
+        <a id="reportLink" class="report-btn" href="#" target="_blank" rel="noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 2h9l5 5v15H6V2Zm8 2H8v16h10V8h-4V4Zm-4 8h6v2h-6v-2Zm0 4h6v2h-6v-2Z"/>
+          </svg>
+          Mở báo cáo TXT
+        </a>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card main-result">
+          <p>Kết quả cuối</p>
+          <h3 id="predictedClass">-</h3>
+        </div>
+        <div class="summary-card">
+          <p>Confidence</p>
+          <h3 id="confidence">-</h3>
+        </div>
+        <div class="summary-card">
+          <p>Uncertainty</p>
+          <h3 id="uncertainty">-</h3>
+        </div>
+        <div class="summary-card">
+          <p>Expected severity</p>
+          <h3 id="severityScore">-</h3>
+        </div>
+      </div>
+
+      <div id="warningBox" class="warning-box"></div>
+
+      <div class="tabs" role="tablist" aria-label="Nhóm kết quả">
+        <button class="tab-btn active" data-tab="ensembleTab" type="button">Ensemble</button>
+        <button class="tab-btn" data-tab="modelsTab" type="button">Từng mô hình</button>
+        <button class="tab-btn" data-tab="imagesTab" type="button">Ảnh & Heatmap</button>
+        <button class="tab-btn" data-tab="explainTab" type="button">Giải thích</button>
+      </div>
+
+      <div id="ensembleTab" class="tab-content active">
+        <h3>Xác suất ensemble 5 lớp</h3>
+        <div id="ensembleProbs" class="prob-list"></div>
+      </div>
+
+      <div id="modelsTab" class="tab-content">
+        <div class="two-col">
+          <section>
+            <h3>DenseNet121</h3>
+            <div id="denseProbs" class="prob-list small"></div>
+          </section>
+          <section>
+            <h3>EfficientNetB3</h3>
+            <div id="effProbs" class="prob-list small"></div>
+          </section>
+        </div>
+      </div>
+
+      <div id="imagesTab" class="tab-content">
+        <div class="heatmap-layout">
+          <div class="image-compare">
+            <figure>
+              <img id="originalImage" alt="Ảnh gốc"/>
+              <figcaption>Ảnh gốc</figcaption>
+            </figure>
+            <figure>
+              <img id="processedImage" alt="Ảnh sau tiền xử lý"/>
+              <figcaption>Ảnh sau crop + CLAHE + resize</figcaption>
+            </figure>
+          </div>
+
+          <div class="heatmap-panel">
+            <figure class="heatmap-figure">
+              <img id="heatmapImage" alt="Heatmap giải thích vùng mô hình chú ý"/>
+              <figcaption>Heatmap giải thích</figcaption>
+            </figure>
+
+            <div class="heatmap-guide" aria-label="Chú giải màu heatmap">
+              <div>
+                <h3>Chú giải màu sắc</h3>
+                <p>Màu càng nóng thể hiện vùng ảnh có mức đóng góp cao hơn vào dự đoán của mô hình.</p>
+              </div>
+              <div class="heat-scale" aria-hidden="true">
+                <span>Thấp</span>
+                <div class="heat-gradient"></div>
+                <span>Cao</span>
+              </div>
+              <ul class="heat-legend">
+                <li>
+                  <span class="swatch swatch-cold"></span>
+                  <div>
+                    <strong>Xanh tím</strong>
+                    <p>Vùng ít ảnh hưởng, mô hình ít chú ý.</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="swatch swatch-mid"></span>
+                  <div>
+                    <strong>Xanh lục/vàng</strong>
+                    <p>Vùng có tín hiệu trung bình, nên đối chiếu với ảnh gốc.</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="swatch swatch-hot"></span>
+                  <div>
+                    <strong>Cam/đỏ/trắng</strong>
+                    <p>Vùng mô hình chú ý mạnh, có thể liên quan tổn thương hoặc cấu trúc nổi bật.</p>
+                  </div>
+                </li>
+              </ul>
+              <p class="heat-note">Heatmap chỉ là hỗ trợ trực quan, không phải bản đồ phân đoạn tổn thương và không thay thế đánh giá của bác sĩ chuyên khoa mắt.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="explainTab" class="tab-content">
+        <div class="explain-card">
+          <h3>Cách hiểu kết quả</h3>
+          <ul>
+            <li><strong>Confidence</strong>: xác suất của lớp được dự đoán cao nhất.</li>
+            <li><strong>Uncertainty</strong>: 1 - confidence. Giá trị càng cao, mô hình càng thiếu chắc chắn.</li>
+            <li><strong>Expected severity</strong>: điểm mức độ bệnh kỳ vọng từ 0 đến 4.</li>
+            <li><strong>Heatmap</strong>: vùng ảnh ảnh hưởng đến dự đoán, chỉ hỗ trợ trực quan và không phải phân đoạn tổn thương y khoa.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>DR Diagnosis System v3 - Academic Medical AI Project</p>
+  </footer>
+
+  <script src="/frontend/js/app.js"></script>
+</body>
+</html>
