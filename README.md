@@ -9,50 +9,61 @@ pinned: false
 
 # DR Diagnosis System v3
 
-**DR Diagnosis System v3** là ứng dụng web AI hỗ trợ phân loại 5 mức độ bệnh võng mạc đái tháo đường từ ảnh đáy mắt. Hệ thống sử dụng ensemble giữa **DenseNet121** và **EfficientNetB3**, hiển thị xác suất từng lớp, độ tin cậy, cảnh báo bất định và heatmap hỗ trợ giải thích vùng ảnh mà mô hình chú ý.
+Hệ thống web ứng dụng trí tuệ nhân tạo hỗ trợ phân loại 5 mức độ bệnh võng mạc đái tháo đường từ ảnh đáy mắt. Dự án sử dụng ensemble giữa hai mô hình học sâu **DenseNet121** và **EfficientNetB3**, kết hợp hiển thị xác suất dự đoán, độ tin cậy, cảnh báo bất định và heatmap giải thích trực quan.
 
-Space demo: [thanhnguyen-nguyen/densenet121_efficientnetb3](https://huggingface.co/spaces/thanhnguyen-nguyen/densenet121_efficientnetb3)
+> **Cảnh báo y tế:** Hệ thống chỉ phục vụ mục đích học thuật, nghiên cứu và hỗ trợ tham khảo. Kết quả từ AI không phải chẩn đoán y khoa cuối cùng, không thay thế bác sĩ chuyên khoa mắt và không được dùng độc lập để đưa ra quyết định điều trị.
 
-> Hệ thống chỉ phục vụ mục đích học thuật, nghiên cứu và hỗ trợ tham khảo. Kết quả AI không phải chẩn đoán y khoa cuối cùng và không thay thế bác sĩ chuyên khoa mắt.
+## Thông Tin Đề Tài
 
-## 1. Mục Tiêu Hệ Thống
+| Mục | Thông tin |
+|---|---|
+| Tên dự án | DR Diagnosis System v3 |
+| Bài toán | Phân loại bệnh võng mạc đái tháo đường từ ảnh đáy mắt |
+| Lĩnh vực | AI y tế, thị giác máy tính, hỗ trợ sàng lọc bệnh mắt |
+| Tác giả | Nguyễn Thành Nguyên |
+| GVHD | ThS. Trần Văn Thiện |
+| Demo | [Hugging Face Space](https://huggingface.co/spaces/thanhnguyen-nguyen/densenet121_efficientnetb3) |
 
-Ứng dụng được xây dựng để hỗ trợ quy trình thử nghiệm/sàng lọc ảnh fundus trong bài toán phát hiện bệnh võng mạc đái tháo đường.
+## Mục Tiêu
 
-Hệ thống hướng tới:
+Dự án được xây dựng nhằm hỗ trợ thử nghiệm mô hình AI trong bài toán phân loại bệnh võng mạc đái tháo đường (Diabetic Retinopathy - DR) trên ảnh fundus.
+
+Các chức năng chính:
 
 - Phân loại ảnh đáy mắt thành 5 mức độ DR.
-- Cung cấp xác suất dự đoán của từng lớp.
-- Cảnh báo khi mô hình thiếu chắc chắn hoặc nhầm lẫn giữa Moderate DR và Severe DR.
-- Hiển thị ảnh gốc, ảnh sau tiền xử lý và heatmap giải thích.
-- Sinh báo cáo TXT phục vụ lưu trữ/kèm kết quả thử nghiệm.
+- Trả về xác suất dự đoán cho từng lớp bệnh.
+- Tính độ tin cậy, độ bất định và điểm mức độ bệnh kỳ vọng.
+- Hiển thị ảnh gốc, ảnh sau tiền xử lý và heatmap hỗ trợ giải thích.
+- Cảnh báo khi mô hình thiếu chắc chắn hoặc khi các mức bệnh gần nhau.
+- Sinh báo cáo kết quả phục vụ lưu trữ và demo học thuật.
 
-## 2. Phạm Vi Sử Dụng
+## Phạm Vi Sử Dụng
 
 ### Intended Use
 
-- Học thuật, demo luận văn, thử nghiệm mô hình AI y tế.
-- Hỗ trợ tham khảo trong sàng lọc ảnh đáy mắt.
-- Giải thích trực quan xu hướng chú ý của mô hình qua heatmap.
+- Demo khóa luận, nghiên cứu khoa học và thử nghiệm mô hình AI y tế.
+- Hỗ trợ tham khảo trong bài toán sàng lọc ảnh đáy mắt.
+- Minh họa cách mô hình chú ý đến các vùng ảnh thông qua heatmap.
+- Phục vụ đánh giá mô hình trong môi trường học thuật.
 
 ### Not Intended For
 
 - Không dùng như công cụ chẩn đoán độc lập.
-- Không dùng để quyết định điều trị.
-- Không dùng thay thế khám mắt, soi đáy mắt hoặc đánh giá bởi bác sĩ chuyên khoa.
-- Không dùng cho ảnh không phải fundus, ảnh mờ, ảnh lệch vùng võng mạc hoặc ảnh đã chỉnh sửa mạnh.
+- Không dùng để quyết định điều trị hoặc thay thế chỉ định của bác sĩ.
+- Không dùng cho ảnh không phải ảnh đáy mắt, ảnh mờ, ảnh lệch vùng võng mạc hoặc ảnh đã chỉnh sửa mạnh.
+- Không dùng trong môi trường lâm sàng nếu chưa được kiểm định y khoa, pháp lý và đánh giá độc lập.
 
-## 3. Phân Lớp Bệnh
+## Nhãn Phân Loại
 
 | Class | Nhãn | Ý nghĩa |
 |---:|---|---|
-| 0 | No DR | Không có dấu hiệu DR |
-| 1 | Mild DR | Bệnh võng mạc đái tháo đường nhẹ |
-| 2 | Moderate DR | Bệnh mức trung bình |
-| 3 | Severe DR | Bệnh mức nặng |
+| 0 | No DR | Không có dấu hiệu bệnh võng mạc đái tháo đường |
+| 1 | Mild DR | Bệnh mức độ nhẹ |
+| 2 | Moderate DR | Bệnh mức độ trung bình |
+| 3 | Severe DR | Bệnh mức độ nặng |
 | 4 | Proliferative DR | Bệnh tăng sinh |
 
-## 4. Kiến Trúc Mô Hình
+## Kiến Trúc Mô Hình
 
 Hệ thống sử dụng ensemble xác suất từ hai backbone CNN:
 
@@ -63,22 +74,24 @@ Predicted class = argmax(P_final)
 
 | Thành phần | Cấu hình |
 |---|---|
-| DenseNet121 | Model `.h5`, weight ensemble 0.45 |
-| EfficientNetB3 | Model `.h5`, weight ensemble 0.55 |
-| Rule | Ensemble argmax |
+| DenseNet121 | `backend/models/densenet121_best.h5`, weight 0.45 |
+| EfficientNetB3 | `backend/models/efficientnetb3_best.h5`, weight 0.55 |
 | Input size | 320 x 320 |
-| Heatmap | Gradient saliency heatmap |
+| Prediction rule | Ensemble argmax |
+| Explainability | Gradient saliency heatmap |
 | ESRGAN | Không sử dụng |
 
-## 5. Tiền Xử Lý Ảnh
+## Pipeline Xử Lý Ảnh
 
-Pipeline tiền xử lý:
-
-1. Đọc ảnh RGB.
-2. Crop viền đen quanh ảnh fundus.
-3. Tăng tương phản nhẹ bằng CLAHE trên không gian màu LAB.
-4. Resize về `320 x 320`.
-5. Chuẩn hóa input theo từng backbone.
+1. Đọc ảnh đầu vào ở định dạng RGB.
+2. Kiểm tra định dạng và kích thước file.
+3. Crop viền đen quanh ảnh fundus.
+4. Tăng tương phản nhẹ bằng CLAHE trên không gian màu LAB.
+5. Resize ảnh về `320 x 320`.
+6. Chuẩn hóa input theo từng backbone.
+7. Dự đoán bằng DenseNet121 và EfficientNetB3.
+8. Trộn xác suất theo trọng số ensemble.
+9. Sinh heatmap và báo cáo kết quả.
 
 Định dạng ảnh hỗ trợ:
 
@@ -88,101 +101,102 @@ Pipeline tiền xử lý:
 
 Kích thước file tối đa mặc định: `10MB`.
 
-## 6. Kết Quả Thực Nghiệm
+## Kết Quả Thực Nghiệm
 
 Kết quả thực nghiệm phiên bản v3:
 
 | Metric | Giá trị |
 |---|---:|
 | Accuracy | 84.73% |
-| QWK | 0.9042 |
+| Quadratic Weighted Kappa | 0.9042 |
 | Macro-F1 | 0.7066 |
 | AUC macro | 0.9522 |
 
-Lưu ý: Accuracy có thể bị ảnh hưởng bởi mất cân bằng lớp. Với bài toán y tế, cần xem thêm macro-F1, recall từng lớp, confusion matrix và kiểm chứng trên external dataset trước khi dùng trong bối cảnh thực tế.
+Trong bài toán y tế, accuracy không nên được xem là chỉ số duy nhất, đặc biệt khi dữ liệu có thể mất cân bằng lớp. Cần xem thêm macro-F1, recall từng lớp, confusion matrix và kết quả kiểm chứng trên external dataset trước khi ứng dụng thực tế.
 
-## 7. Output Của Hệ Thống
+## Output Hệ Thống
 
 Sau khi upload ảnh, hệ thống trả về:
 
 - Lớp dự đoán cuối cùng.
 - Confidence top-1.
 - Uncertainty = `1 - confidence`.
-- Expected severity score từ 0 đến 4.
+- Entropy của phân phối xác suất.
+- Expected severity score trong khoảng 0 đến 4.
 - Xác suất ensemble của 5 lớp.
 - Xác suất riêng từ DenseNet121 và EfficientNetB3.
-- Cảnh báo y tế nếu mô hình bất định hoặc class 2/class 3 gần nhau.
+- Cảnh báo y tế khi mô hình bất định hoặc class 2/class 3 gần nhau.
 - Ảnh gốc, ảnh sau tiền xử lý và heatmap.
-- Link báo cáo TXT.
+- Link báo cáo kết quả.
 
-## 8. Giải Thích Heatmap
+## Giải Thích Heatmap
 
 Heatmap thể hiện mức độ đóng góp tương đối của từng vùng ảnh vào dự đoán của mô hình.
 
-| Màu | Ý nghĩa |
+| Vùng màu | Diễn giải |
 |---|---|
-| Xanh tím | Vùng ít ảnh hưởng, mô hình ít chú ý |
+| Xanh tím | Vùng ít ảnh hưởng đến dự đoán |
 | Xanh lục/vàng | Vùng có tín hiệu trung bình, nên đối chiếu với ảnh gốc |
-| Cam/đỏ/trắng | Vùng mô hình chú ý mạnh, có thể liên quan tổn thương hoặc cấu trúc nổi bật |
+| Cam/đỏ/trắng | Vùng mô hình chú ý mạnh |
 
-Heatmap chỉ là công cụ hỗ trợ trực quan. Đây không phải bản đồ phân đoạn tổn thương và không chứng minh chắc chắn nguyên nhân y khoa của dự đoán.
+Heatmap chỉ là công cụ hỗ trợ trực quan, không phải bản đồ phân đoạn tổn thương và không chứng minh chắc chắn nguyên nhân y khoa của dự đoán.
 
-## 9. Cảnh Báo Và Cơ Chế An Toàn
+## Cảnh Báo Và Cơ Chế An Toàn
 
-Hệ thống có các cảnh báo:
+Hệ thống có thể đưa ra cảnh báo khi:
 
 - Confidence thấp hoặc uncertainty cao.
-- Xác suất class 2 và class 3 gần nhau.
+- Xác suất giữa class 2 và class 3 gần nhau.
 - Mô hình dự đoán Moderate DR nhưng Severe DR cũng có xác suất đáng chú ý.
 - Mô hình dự đoán Severe DR nhưng chưa tách biệt rõ với Moderate DR.
 
-Trong các trường hợp trên, kết quả cần được kiểm tra lại bởi chuyên gia.
+Khi xuất hiện các cảnh báo trên, kết quả cần được kiểm tra lại bởi chuyên gia y tế.
 
-## 10. Giới Hạn Hệ Thống
+## Giới Hạn
 
 - Class 3 - Severe DR còn là điểm yếu trong thực nghiệm.
 - Dữ liệu huấn luyện có thể mất cân bằng giữa các lớp.
-- Chưa có module kiểm tra chất lượng ảnh đầu vào.
+- Chưa có module đánh giá chất lượng ảnh đầu vào một cách đầy đủ.
 - Chưa phân đoạn tổn thương y khoa.
 - Chưa kiểm chứng đầy đủ trên external dataset hoặc dữ liệu bệnh viện thực tế tại Việt Nam.
-- Có thể nhạy với ảnh mờ, ảnh thiếu sáng, ảnh lệch vùng võng mạc hoặc ảnh có artifact.
-- Không phù hợp để dùng làm hệ thống hỗ trợ quyết định lâm sàng nếu chưa qua đánh giá y khoa, pháp lý và kiểm định độc lập.
+- Có thể nhạy với ảnh mờ, thiếu sáng, lệch vùng võng mạc hoặc có artifact.
+- Không phù hợp để dùng làm hệ thống hỗ trợ quyết định lâm sàng nếu chưa qua kiểm định độc lập.
 
-## 11. Dữ Liệu Và Thiên Lệch
+## Dữ Liệu Và Thiên Lệch
 
-Dự án tham chiếu bài toán **APTOS 2019 Blindness Detection** cho phân loại 5 lớp DR.
+Dự án tham chiếu bài toán **APTOS 2019 Blindness Detection** cho phân loại DR 5 lớp.
 
 Các rủi ro dữ liệu cần lưu ý:
 
 - Phân phối lớp không cân bằng.
 - Ảnh từ một nguồn dữ liệu có thể không đại diện cho nhiều loại thiết bị chụp, dân số bệnh nhân hoặc quy trình bệnh viện khác nhau.
-- Nhãn mức độ bệnh có thể có sai khác giữa chuyên gia.
+- Nhãn mức độ bệnh có thể có sai khác giữa các chuyên gia.
 - Hiệu năng thực tế có thể giảm khi triển khai trên dữ liệu ngoài miền huấn luyện.
 
-## 12. Quyền Riêng Tư Và Dữ Liệu Người Dùng
+## Quyền Riêng Tư Và Dữ Liệu Người Dùng
 
 Khi chạy demo, ảnh upload được lưu tạm trong thư mục static của ứng dụng để hiển thị kết quả và sinh báo cáo. Không nên upload ảnh chứa thông tin định danh bệnh nhân nếu chưa được ẩn danh.
 
 Khuyến nghị khi triển khai thực tế:
 
 - Ẩn danh dữ liệu trước khi upload.
-- Thiết lập cơ chế tự động xóa file upload/report sau một khoảng thời gian.
+- Thiết lập cơ chế tự động xóa file upload, heatmap và report sau một khoảng thời gian.
 - Không lưu thông tin cá nhân nếu không cần thiết.
 - Tuân thủ quy định bảo mật dữ liệu y tế tại nơi triển khai.
 
-## 13. API
+## API
 
 ### `GET /api/health`
 
-Kiểm tra trạng thái hệ thống và model.
+Kiểm tra trạng thái hệ thống và trạng thái load model.
 
 ### `GET /api/class-names`
 
-Trả danh sách class.
+Trả danh sách nhãn phân loại.
 
 ### `POST /api/predict`
 
-Upload ảnh và nhận kết quả dự đoán.
+Upload ảnh fundus và nhận kết quả dự đoán.
 
 Request:
 
@@ -191,12 +205,12 @@ multipart/form-data
 field: file
 ```
 
-Response chính:
+Response mẫu:
 
 ```json
 {
   "predicted_class": 2,
-  "predicted_class_name": "Moderate DR - Bệnh trung bình",
+  "predicted_class_name": "Moderate DR",
   "confidence": 0.82,
   "uncertainty": 0.18,
   "entropy": 0.5,
@@ -214,13 +228,14 @@ Response chính:
 }
 ```
 
-## 14. Cấu Trúc Dự Án
+## Cấu Trúc Dự Án
 
 ```text
 DR_Diagnosis_System_v3/
 ├── app.py
 ├── run.py
 ├── Dockerfile
+├── README.md
 ├── backend/
 │   ├── app/
 │   │   ├── api/
@@ -235,13 +250,16 @@ DR_Diagnosis_System_v3/
 │   └── requirements.txt
 ├── frontend/
 │   ├── index.html
-│   ├── css/style.css
-│   └── js/app.js
+│   ├── css/
+│   └── js/
 ├── docs/
-└── tests/
+├── reports/
+├── training/
+├── tests/
+└── baocao/
 ```
 
-## 15. Chạy Local
+## Cài Đặt Và Chạy Local
 
 Cài dependencies:
 
@@ -255,55 +273,88 @@ Chạy ứng dụng:
 python run.py
 ```
 
-Mặc định app chạy ở:
+Mặc định ứng dụng chạy tại:
 
 ```text
 http://127.0.0.1:7860
 ```
 
-Có thể đổi port:
+Có thể đổi port bằng biến môi trường:
 
 ```bash
 set PORT=8000
 python run.py
 ```
 
-## 16. Triển Khai Hugging Face Spaces
+Hoặc:
 
-Space dùng Docker.
+```bash
+set DR_PORT=8000
+python run.py
+```
+
+## Triển Khai Bằng Docker
+
+Build image:
+
+```bash
+docker build -t dr-diagnosis-system .
+```
+
+Chạy container:
+
+```bash
+docker run -p 7860:7860 dr-diagnosis-system
+```
+
+## Triển Khai Hugging Face Spaces
+
+Dự án hỗ trợ triển khai trên Hugging Face Spaces bằng Docker.
 
 Các file chính:
 
-- `README.md`: metadata Space, mô tả hệ thống.
-- `Dockerfile`: build environment.
-- `app.py` / `run.py`: entrypoint Flask.
+- `README.md`: metadata Space và mô tả dự án.
+- `Dockerfile`: cấu hình build environment.
+- `app.py` và `run.py`: entrypoint Flask.
 - `backend/requirements.txt`: dependencies.
-- `backend/models/*.h5`: model weights, track bằng Git LFS.
+- `backend/models/*.h5`: model weights.
 
-Link Space:
+Demo:
 
 ```text
 https://huggingface.co/spaces/thanhnguyen-nguyen/densenet121_efficientnetb3
 ```
 
-## 17. Checklist Trước Khi Demo
+## Checklist Trước Khi Demo
 
-- [ ] Space build thành công.
+- [ ] Ứng dụng khởi động thành công.
 - [ ] `/api/health` trả trạng thái model sẵn sàng.
 - [ ] Upload ảnh fundus thành công.
-- [ ] Hiển thị kết quả dự đoán cuối.
+- [ ] Hiển thị lớp dự đoán cuối cùng.
 - [ ] Hiển thị xác suất 5 lớp.
-- [ ] Hiển thị kết quả từng model.
+- [ ] Hiển thị kết quả riêng của từng model.
 - [ ] Hiển thị ảnh sau tiền xử lý.
 - [ ] Hiển thị heatmap.
-- [ ] Sinh báo cáo TXT.
-- [ ] Cảnh báo y tế hiển thị đúng khi class 2/class 3 gần nhau.
+- [ ] Sinh báo cáo kết quả.
 - [ ] Disclaimer y tế hiển thị rõ ràng.
 
-## 18. Trách Nhiệm Sử Dụng
+## Tài Liệu Liên Quan
+
+- [API Reference](docs/API_REFERENCE.md)
+- [Dataset Card](docs/DATASET_CARD.md)
+- [Model Card](docs/MODEL_CARD.md)
+- [Medical Disclaimer](docs/MEDICAL_DISCLAIMER.md)
+- [Limitations](docs/LIMITATIONS.md)
+- [Validation Checklist](docs/VALIDATION_CHECKLIST.md)
+
+## Trách Nhiệm Sử Dụng
 
 Người dùng cần hiểu rằng mô hình AI có thể sai, đặc biệt trong các trường hợp ảnh chất lượng thấp, dữ liệu ngoài miền huấn luyện hoặc mức độ bệnh nằm gần ranh giới giữa các lớp. Mọi quyết định y khoa phải được thực hiện bởi nhân viên y tế có chuyên môn.
 
-## 19. Tác Giả
+## Tác Giả
 
-Dự án học thuật phục vụ luận văn và nghiên cứu ứng dụng AI trong hỗ trợ phân loại bệnh võng mạc đái tháo đường.
+**Nguyễn Thành Nguyên**
+
+Dự án được thực hiện dưới sự hướng dẫn của **GVHD: ThS. Trần Văn Thiện**.
+
+Nội dung thuộc phạm vi học thuật, nghiên cứu và demo hệ thống AI hỗ trợ phân loại bệnh võng mạc đái tháo đường từ ảnh đáy mắt.
