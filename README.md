@@ -232,31 +232,31 @@ Response mẫu:
 
 ```text
 DR_Diagnosis_System_v3/
-├── app.py
-├── run.py
-├── Dockerfile
-├── README.md
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   ├── core/
-│   │   ├── services/
-│   │   └── utils/
-│   ├── models/
-│   │   ├── densenet121_best.h5
-│   │   ├── efficientnetb3_best.h5
-│   │   └── inference_config.json
-│   ├── static/
-│   └── requirements.txt
-├── frontend/
-│   ├── index.html
-│   ├── css/
-│   └── js/
-├── docs/
-├── reports/
-├── training/
-├── tests/
-└── baocao/
+├── app.py                         # Entry point tương thích Hugging Face Spaces/Docker
+├── run.py                         # Entry point chạy Flask app ở local
+├── Dockerfile                     # Cấu hình build container triển khai
+├── README.md                      # Tài liệu tổng quan của repo
+├── backend/                       # Backend Flask, inference model và API
+│   ├── app/                       # Source code chính của backend
+│   │   ├── api/                   # Định nghĩa API routes: health, class-names, predict
+│   │   ├── core/                  # Cấu hình đường dẫn, model, class names, ngưỡng cảnh báo
+│   │   ├── services/              # Logic load model, predict, ensemble và tính metric output
+│   │   └── utils/                 # Tiện ích xử lý ảnh, heatmap, report và validate upload
+│   ├── models/                    # Nơi lưu model weights và cấu hình inference
+│   │   ├── densenet121_best.h5    # Model DenseNet121 đã huấn luyện
+│   │   ├── efficientnetb3_best.h5 # Model EfficientNetB3 đã huấn luyện
+│   │   └── inference_config.json  # Cấu hình ensemble, image size, class names
+│   ├── static/                    # File sinh khi chạy app: uploads, processed, heatmaps, reports
+│   └── requirements.txt           # Dependencies Python cho backend
+├── frontend/                      # Giao diện web upload ảnh và hiển thị kết quả
+│   ├── index.html                 # Trang chính của ứng dụng
+│   ├── css/                       # Style giao diện
+│   └── js/                        # Logic frontend gọi API và render kết quả
+├── docs/                          # Tài liệu kỹ thuật: API, model card, dataset card, disclaimer
+├── reports/                       # Ghi chú/bảng biểu tổng hợp phục vụ báo cáo nghiên cứu
+├── training/                      # Notebook và script huấn luyện model trên Kaggle
+├── tests/                         # Test cơ bản cho cấu trúc và backend
+└── baocao/                        # File báo cáo khóa luận/NCKH dạng DOCX/PDF
 ```
 
 ## Cài Đặt Và Chạy Local
