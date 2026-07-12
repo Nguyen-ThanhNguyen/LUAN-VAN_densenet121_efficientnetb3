@@ -1,7 +1,9 @@
 venv/
 __pycache__/
 *.pyc
+*.log
 .env
+~$*.docx
 
 backend/static/uploads/*
 backend/static/processed/*

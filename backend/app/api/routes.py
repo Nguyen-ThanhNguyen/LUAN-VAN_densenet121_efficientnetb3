@@ -68,8 +68,9 @@ def predict():
         else:
             result["heatmap_url"] = ""
 
-        write_prediction_report(result, report_path)
-        result["report_url"] = f"/static/reports/{report_path.name}"
+        html_report_path = write_prediction_report(result, report_path)
+        result["report_url"] = f"/static/reports/{html_report_path.name}"
+        result["report_text_url"] = f"/static/reports/{report_path.name}"
 
         return jsonify(result), 200
 
